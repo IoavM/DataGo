@@ -7,7 +7,7 @@ import { Cliente } from '../models/cliente.model';
 })
 export class ClienteService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:5181/api';
+  private apiUrl = 'https://datago-api.onrender.com/api';
 
   private clientesSignal = signal<Cliente[]>([]);
   readonly clientes = this.clientesSignal.asReadonly();
@@ -82,4 +82,5 @@ export class ClienteService {
     return { nombres, apellidos };
   }
 }
+
 
