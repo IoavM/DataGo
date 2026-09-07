@@ -1,23 +1,33 @@
-﻿.form-page-container {
-  padding: 24px 36px 60px;
+﻿.page-viewport-wrapper {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  max-width: 960px;
-  width: 100%;
-  margin: 0 auto;
   box-sizing: border-box;
-  text-align: left;
 }
 
-/* Header Superior con Breadcrumb */
+/* Header Superior de ANCHO COMPLETO (100% de la pantalla) */
 .top-header {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 36px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid var(--border);
+  background-color: var(--surface);
+}
+
+/* Contenedor solo del formulario centrado con margen automático */
+.form-content-center {
+  max-width: 960px;
   width: 100%;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--border-light);
+  margin: 0 auto;
+  padding: 28px 24px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-sizing: border-box;
+  text-align: left;
 }
 
 .breadcrumb-nav {
@@ -842,5 +852,6 @@
   box-shadow: 0 4px 14px rgba(24, 111, 85, 0.3);
   transform: translateY(-1px);
 }
+
 
 
