@@ -181,9 +181,9 @@
             }
           </div>
           @if (documentoValido()) {
-            <span class="input-hint success-hint">✓ Documento con estructura correcta y sin duplicados</span>
+            <span class="input-hint success-hint">✓ Documento válido</span>
           } @else if (numeroDocumento().length > 0) {
-            <span class="input-hint text-danger">⚠️ Ingrese un documento real (entre 6 y 10 dígitos sin dummies)</span>
+            <span class="input-hint text-danger">⚠️ Documento no válido</span>
           }
         </div>
       </div>
@@ -288,7 +288,7 @@
 
       @if (esDummyEmail()) {
         <div class="dummy-warning">
-          ⚠️ Por favor ingresa un correo real. Las direcciones dummy no están permitidas.
+          ⚠️ Ingrese un correo electrónico válido.
         </div>
       }
     </section>
@@ -512,5 +512,6 @@
 
   </div>
 </div>
+
 
 
