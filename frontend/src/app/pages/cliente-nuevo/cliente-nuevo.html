@@ -1,0 +1,551 @@
+﻿<div class="form-page-container">
+  
+  <!-- Header Superior -->
+  <header class="top-header">
+    <div class="breadcrumb-nav">
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        <span>Comunidad Residencial Activa</span>
+      </div>
+      <span class="breadcrumb-slash">/</span>
+      <span class="breadcrumb-current">Flujo Guiado de Alta Residencial</span>
+    </div>
+
+    <div class="header-right">
+      <div class="search-mini">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" placeholder="Buscar unidad, residente o trámite..." class="search-mini-input" />
+      </div>
+
+      <button class="icon-btn" title="Notificaciones">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="notify-dot"></span>
+      </button>
+
+      <div class="user-profile">
+        <div class="avatar">CR</div>
+        <div class="user-info">
+          <span class="user-name">Carolina Restrepo</span>
+          <span class="user-role">Operaciones</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Título del Formulario -->
+  <section class="form-title-section">
+    <div class="title-tag">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      <span>FLUJO GUIADO DE ALTA RESIDENCIAL</span>
+    </div>
+    <h1 class="page-title">Nuevo Cliente Residencial</h1>
+    <p class="page-subtitle">Completa la información paso a paso. Sistema con validación en tiempo real y asistencia inteligente.</p>
+  </section>
+
+  <!-- BARRA DE PASOS CONTINUOS (STEPPER) -->
+  <nav class="stepper-bar">
+    <button type="button" (click)="scrollTo('paso1')" class="step-pill completed">
+      <span class="step-badge">✓</span>
+      <div class="step-text">
+        <span class="step-num">PASO 1</span>
+        <span class="step-label">Cliente</span>
+      </div>
+    </button>
+
+    <button type="button" (click)="scrollTo('paso2')" class="step-pill active">
+      <span class="step-badge">2</span>
+      <div class="step-text">
+        <span class="step-num">PASO 2</span>
+        <span class="step-label">Identificación</span>
+      </div>
+    </button>
+
+    <button type="button" (click)="scrollTo('paso3')" class="step-pill">
+      <span class="step-badge">3</span>
+      <div class="step-text">
+        <span class="step-num">PASO 3</span>
+        <span class="step-label">Contacto</span>
+      </div>
+    </button>
+
+    <button type="button" (click)="scrollTo('paso4')" class="step-pill">
+      <span class="step-badge">4</span>
+      <div class="step-text">
+        <span class="step-num">PASO 4</span>
+        <span class="step-label">Dirección</span>
+      </div>
+    </button>
+
+    <button type="button" (click)="scrollTo('paso5')" class="step-pill">
+      <span class="step-badge">5</span>
+      <div class="step-text">
+        <span class="step-num">PASO 5</span>
+        <span class="step-label">Adicional</span>
+      </div>
+    </button>
+
+    <button type="button" (click)="scrollTo('paso6')" class="step-pill">
+      <span class="step-badge">6</span>
+      <div class="step-text">
+        <span class="step-num">PASO 6</span>
+        <span class="step-label">Revisar</span>
+      </div>
+    </button>
+  </nav>
+
+  <!-- CONTENIDO DE PASOS DESPLAZABLE VERTICALMENTE EN LA MISMA PÁGINA -->
+  <div class="form-flow-body">
+    
+    <!-- ENCABEZADO DE SECCIÓN PRINCIPAL -->
+    <div class="section-card-header">
+      <h2 class="card-headline">¿Quién es el cliente y cómo se identifica?</h2>
+      <p class="card-subheadline">Verifica y completa los datos legales y comerciales básicos para el registro en el padrón residencial.</p>
+    </div>
+
+    <!-- PASO 1: Tipo de Cliente y Nombres -->
+    <section id="paso1" class="form-step-card">
+      <div class="step-card-header">
+        <div class="header-left-title">
+          <span class="step-icon">📋</span>
+          <h3 class="step-title">1. Tipo de cliente y nombres</h3>
+        </div>
+        <span class="status-tag confirmed">✓ Confirmado</span>
+      </div>
+
+      <!-- Selector de Tratamiento -->
+      <div class="form-group">
+        <label class="group-label">TIPO DE PERSONERÍA JURÍDICA O NATURAL</label>
+        <div class="segmented-treatment">
+          <button 
+            type="button" 
+            [class.selected]="tratamiento() === 'Sr/Sra'"
+            (click)="setTratamiento('Sr/Sra')">
+            <span class="radio-circle"></span> Sr / Sra (Persona Natural)
+          </button>
+          <button 
+            type="button" 
+            [class.selected]="tratamiento() === 'Empresa'"
+            (click)="setTratamiento('Empresa')">
+            <span class="radio-circle"></span> Empresa (Persona Jurídica)
+          </button>
+        </div>
+      </div>
+
+      <!-- Inputs de Nombres -->
+      <div class="grid-2-cols">
+        <div class="form-group">
+          <label class="input-label">Nombre comercial o de negocio</label>
+          <input 
+            type="text" 
+            [ngModel]="nombreNegocio()" 
+            (ngModelChange)="nombreNegocio.set($event)"
+            placeholder="Ej: Distribuciones JC"
+            class="form-input" 
+          />
+          <span class="input-hint">Identificador común en urbanizaciones o condominios</span>
+        </div>
+
+        <div class="form-group">
+          <label class="input-label">Razón social / Nombre legal extendido</label>
+          <input 
+            type="text" 
+            [ngModel]="razonSocial()" 
+            (ngModelChange)="razonSocial.set($event)"
+            placeholder="Ej: Juan Carlos Pérez Gómez"
+            class="form-input" 
+          />
+          <span class="input-hint">Tal como figura en el documento oficial</span>
+        </div>
+      </div>
+
+      <!-- Cuadro de Cálculo Automático de Nombres -->
+      <div class="auto-calc-box">
+        <div class="calc-header">
+          <span class="sparkle-icon">✨</span>
+          <span class="calc-title">CALCULADO AUTOMÁTICAMENTE POR DATAGO</span>
+        </div>
+        <div class="calc-results">
+          <div class="calc-item">
+            <span class="calc-label">Se identificará como:</span>
+            <strong class="calc-value">{{ nombresSeparados().nombreCompleto }}</strong>
+          </div>
+          <div class="calc-item">
+            <span class="calc-label">Nombres:</span>
+            <strong class="calc-value">{{ nombresSeparados().nombres }}</strong>
+          </div>
+          <div class="calc-item">
+            <span class="calc-label">Apellidos:</span>
+            <strong class="calc-value">{{ nombresSeparados().apellidos }}</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PASO 2: Identificación Oficial -->
+    <section id="paso2" class="form-step-card">
+      <div class="step-card-header">
+        <div class="header-left-title">
+          <span class="step-icon">🪪</span>
+          <h3 class="step-title">2. Identificación Oficial</h3>
+        </div>
+        <span class="status-tag editing">● En edición</span>
+      </div>
+
+      <div class="grid-2-cols">
+        <div class="form-group">
+          <label class="input-label">Tipo de documento</label>
+          <select 
+            class="form-select"
+            [disabled]="tratamiento() === 'Empresa'"
+            [ngModel]="tipoDocumento()"
+            (ngModelChange)="tipoDocumento.set($event)">
+            <option value="C.C.">Cédula de Ciudadanía (C.C.)</option>
+            <option value="C.E.">Cédula de Extranjería (C.E.)</option>
+            <option value="NIT">NIT (Empresas)</option>
+          </select>
+          <span class="input-hint">
+            {{ tratamiento() === 'Empresa' ? 'Bloqueado a NIT para personas jurídicas' : 'Documento nacional de identidad' }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label class="input-label">Número de documento</label>
+          <div class="input-with-badge">
+            <input 
+              type="text" 
+              [ngModel]="numeroDocumento()" 
+              (ngModelChange)="numeroDocumento.set($event)"
+              placeholder="Número sin puntos" 
+              class="form-input" 
+            />
+            <span class="status-valid">✓ Válido</span>
+          </div>
+          <span class="input-hint success-hint">✓ Documento válido y sin duplicados en el registro activo</span>
+        </div>
+      </div>
+
+      <!-- Tarjeta de Cálculo del Dígito de Verificación (D.V.) de la DIAN -->
+      <div class="dv-calc-card">
+        <div class="dv-left">
+          <div class="dv-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect width="18" height="18" x="3" y="3" rx="2"/>
+              <path d="M7 7h10"/>
+              <path d="M7 12h10"/>
+              <path d="M7 17h10"/>
+            </svg>
+          </div>
+          <div class="dv-text">
+            <strong>CÁLCULO DE DÍGITO DE VERIFICACIÓN (DV)</strong>
+            <span>Algoritmo DIAN módulo 11 calculado automáticamente en tiempo real</span>
+          </div>
+        </div>
+        <div class="dv-right">
+          <div class="dv-pill">
+            <span class="dv-sub">DÍGITO CALCULADO</span>
+            <span class="dv-result">DV: {{ dvCalculado() ?? '-' }}</span>
+          </div>
+          <span class="dv-badge-success">✓ NIT válido</span>
+        </div>
+      </div>
+
+      <!-- Alerta de Canal Moderno -->
+      <div class="alert-box" [class.alert-danger]="esCanalModerno()">
+        <div class="alert-icon">ℹ️</div>
+        <div class="alert-content">
+          <strong class="alert-title">¿Cliente de Canal Moderno?</strong>
+          <p class="alert-text">
+            Si el cliente pertenece a grandes superficies, almacenes de cadena o consignaciones residenciales, debe crearse mediante el flujo especializado <strong>"Creación clientes canal moderno"</strong>.
+          </p>
+          @if (esCanalModerno()) {
+            <div class="canal-error-badge">
+              ⚠️ Este documento ya existe en Canal Moderno. No se permite continuar aquí.
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- PASO 3: Contacto -->
+    <section id="paso3" class="form-step-card">
+      <div class="step-card-header">
+        <div class="header-left-title">
+          <span class="step-icon">📞</span>
+          <h3 class="step-title">3. ¿Cómo podemos contactar al cliente?</h3>
+        </div>
+        <span class="rule-tag">Regla: Registra al menos un teléfono</span>
+      </div>
+
+      <div class="grid-3-cols">
+        <div class="form-group">
+          <label class="input-label">TELÉFONO FIJO</label>
+          <input 
+            type="text" 
+            [ngModel]="telefonoFijo()" 
+            (ngModelChange)="telefonoFijo.set($event)"
+            placeholder="(604) 448 9200" 
+            class="form-input" 
+          />
+          <span class="input-hint">Incluye extensión si aplica</span>
+        </div>
+
+        <div class="form-group">
+          <label class="input-label">CELULAR PRINCIPAL</label>
+          <input 
+            type="text" 
+            [ngModel]="celular()" 
+            (ngModelChange)="celular.set($event)"
+            placeholder="+57 312 849 2011" 
+            class="form-input" 
+          />
+          <span class="input-hint">Línea directa para notificaciones</span>
+        </div>
+
+        <div class="form-group">
+          <label class="input-label">CORREO ELECTRÓNICO</label>
+          <input 
+            type="email" 
+            [ngModel]="email()" 
+            (ngModelChange)="email.set($event)"
+            placeholder="ejemplo@empresa.com" 
+            class="form-input" 
+          />
+          <span class="input-hint" [class.text-danger]="tipoDocumento() === 'NIT'">
+            {{ tipoDocumento() === 'NIT' ? '⚠️ Obligatorio para clientes con NIT' : 'Para facturación y estados' }}
+          </span>
+        </div>
+      </div>
+
+      @if (esDummyEmail()) {
+        <div class="dummy-warning">
+          ⚠️ Por favor ingresa un correo real. Las direcciones dummy no están permitidas.
+        </div>
+      }
+    </section>
+
+    <!-- PASO 4: Dirección y Ubicación -->
+    <section id="paso4" class="form-step-card">
+      <div class="step-card-header">
+        <div class="header-left-title">
+          <span class="step-icon">📍</span>
+          <h3 class="step-title">4. Ubicación y Dirección</h3>
+        </div>
+        <span class="rule-tag">Nomenclatura Urbana o Rural</span>
+      </div>
+
+      <!-- Selección de Barrio y Autocompletado -->
+      <div class="grid-2-cols">
+        <div class="form-group">
+          <label class="input-label">Barrio (Buscar para autocompletar)</label>
+          <select 
+            class="form-select"
+            [ngModel]="barrioSeleccionado()" 
+            (change)="onBarrioChange($event)">
+            <option value="Laureles">Laureles (Medellín)</option>
+            <option value="El Poblado">El Poblado (Medellín)</option>
+            <option value="La Floresta">La Floresta (Medellín)</option>
+            <option value="Zúñiga">Zúñiga (Envigado)</option>
+            <option value="Chapinero">Chapinero (Bogotá D.C.)</option>
+          </select>
+          <span class="input-hint">Autocompleta municipio, departamento y zona</span>
+        </div>
+
+        <div class="readonly-location-box">
+          <div class="loc-item"><span>Municipio:</span> <strong>{{ municipio() }}</strong></div>
+          <div class="loc-item"><span>Depto:</span> <strong>{{ departamento() }}</strong></div>
+          <div class="loc-item"><span>País:</span> <strong>{{ pais() }}</strong></div>
+          <div class="loc-item"><span>Zona:</span> <strong>{{ zonaTransporte() }}</strong></div>
+        </div>
+      </div>
+
+      <!-- Checkbox Dirección Rural -->
+      <div class="checkbox-row">
+        <label class="checkbox-label">
+          <input 
+            type="checkbox" 
+            [checked]="esRural()" 
+            (change)="esRural.set(!esRural())" 
+          />
+          <span>¿Es dirección rural? (Habilita texto libre)</span>
+        </label>
+      </div>
+
+      <!-- Campos de dirección urbana o rural -->
+      @if (esRural()) {
+        <div class="form-group">
+          <label class="input-label">Descripción de la dirección rural</label>
+          <textarea 
+            rows="2" 
+            [ngModel]="direccionRural()" 
+            (ngModelChange)="direccionRural.set($event)"
+            placeholder="Ej: Vereda El Salado, Finca La Esperanza, Km 4 vía oriente"
+            class="form-textarea"></textarea>
+        </div>
+      } @else {
+        <!-- Nomenclatura urbana -->
+        <div class="nomenclatura-grid">
+          <div class="form-group">
+            <label class="input-label">Vía Principal</label>
+            <select class="form-select" [ngModel]="viaTipo()" (ngModelChange)="viaTipo.set($event)">
+              <option value="Calle">Calle</option>
+              <option value="Carrera">Carrera</option>
+              <option value="Avenida">Avenida</option>
+              <option value="Diagonal">Diagonal</option>
+              <option value="Transversal">Transversal</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="input-label">Número</label>
+            <input type="text" [ngModel]="viaNumero()" (ngModelChange)="viaNumero.set($event)" class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label class="input-label">Letra</label>
+            <input type="text" [ngModel]="viaLetra()" (ngModelChange)="viaLetra.set($event)" class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label class="input-label">Cardinalidad</label>
+            <select class="form-select" [ngModel]="viaCardinalidad()" (ngModelChange)="viaCardinalidad.set($event)">
+              <option value="">Sin cardinalidad</option>
+              <option value="Sur">Sur</option>
+              <option value="Norte">Norte</option>
+              <option value="Este">Este</option>
+              <option value="Oeste">Oeste</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="input-label">Cruce (#)</label>
+            <input type="text" [ngModel]="cruceNumero()" (ngModelChange)="cruceNumero.set($event)" class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label class="input-label">Placa (-)</label>
+            <input type="text" [ngModel]="placaNumero()" (ngModelChange)="placaNumero.set($event)" class="form-input" />
+          </div>
+        </div>
+      }
+
+      <!-- Vista previa reactiva de la dirección -->
+      <div class="address-preview-card">
+        <span class="pin-icon">📍</span>
+        <div>
+          <span class="preview-title">Vista previa de la dirección generada:</span>
+          <strong class="preview-text">{{ direccionCompleta() }}</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- PASO 5: Información Adicional y Condiciones -->
+    <section id="paso5" class="form-step-card">
+      <div class="step-card-header">
+        <div class="header-left-title">
+          <span class="step-icon">⚙️</span>
+          <h3 class="step-title">5. Información Adicional y Reglas Fijadas</h3>
+        </div>
+        <span class="status-tag confirmed">Datos Automáticos</span>
+      </div>
+
+      <div class="grid-2-cols">
+        <div class="form-group">
+          <label class="input-label">Centro de atención (Obligatorio)</label>
+          <select class="form-select" [ngModel]="centro()" (ngModelChange)="centro.set($event)">
+            <option value="Sede Principal Medellín">Sede Principal Medellín</option>
+            <option value="Sede Norte Bello">Sede Norte Bello</option>
+            <option value="Sede Sur Envigado">Sede Sur Envigado</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="input-label">Estrato socioeconómico</label>
+          <select class="form-select" [ngModel]="estrato()" (ngModelChange)="estrato.set(+$event)">
+            <option [value]="1">Estrato 1 - Bajo-Bajo</option>
+            <option [value]="2">Estrato 2 - Bajo</option>
+            <option [value]="3">Estrato 3 - Medio-Bajo</option>
+            <option [value]="4">Estrato 4 - Medio</option>
+            <option [value]="5">Estrato 5 - Medio-Alto</option>
+            <option [value]="6">Estrato 6 - Alto</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Campos de Solo Lectura fijados por el negocio -->
+      <div class="grid-2-cols readonly-section">
+        <div class="readonly-badge-card">
+          <span class="ro-label">CLASE DE IMPUESTO (SOLO LECTURA)</span>
+          <strong class="ro-val">{{ claseImpuesto() }}</strong>
+          <span class="ro-sub">Derivado de Tratamiento: {{ tratamiento() }}</span>
+        </div>
+
+        <div class="readonly-badge-card">
+          <span class="ro-label">CONDICIÓN DE PAGO (FIJADO)</span>
+          <strong class="ro-val">{{ condicionPago }}</strong>
+          <span class="ro-sub">Asignado por defecto para altas residenciales</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PASO 6: Revisión y Confirmación Final -->
+    <section id="paso6" class="form-step-card review-card">
+      <div class="step-card-header">
+        <div class="header-left-title">
+          <span class="step-icon">✅</span>
+          <h3 class="step-title">6. Resumen y Confirmación Final</h3>
+        </div>
+        <span class="status-tag confirmed">Listo para guardar</span>
+      </div>
+
+      <div class="review-summary-grid">
+        <div class="summary-item">
+          <span>Cliente:</span>
+          <strong>{{ nombresSeparados().nombreCompleto }} ({{ nombreNegocio() }})</strong>
+        </div>
+        <div class="summary-item">
+          <span>Identificación:</span>
+          <strong>{{ tipoDocumento() }} {{ numeroDocumento() }} {{ dvCalculado() !== null ? '- ' + dvCalculado() : '' }}</strong>
+        </div>
+        <div class="summary-item">
+          <span>Contacto:</span>
+          <strong>{{ celular() || telefonoFijo() }} | {{ email() }}</strong>
+        </div>
+        <div class="summary-item">
+          <span>Ubicación:</span>
+          <strong>{{ direccionCompleta() }}</strong>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- BARRA FLOTANTE / INFERIOR DE ACCIONES -->
+  <footer class="form-action-footer">
+    <a routerLink="/clientes" class="btn-cancel">
+      ✕ Cancelar y volver al listado
+    </a>
+
+    <div class="footer-action-buttons">
+      <button type="button" (click)="scrollTo('paso1')" class="btn-secondary">
+        ↑ Subir al inicio
+      </button>
+
+      <button type="button" (click)="guardarCliente()" class="btn-submit">
+        <span>Guardar Cliente Residencial</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </button>
+    </div>
+  </footer>
+
+</div>
