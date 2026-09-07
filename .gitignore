@@ -17,3 +17,8 @@ npm-debug.log*
 *.db-wal
 .DS_Store
 Thumbs.db
+
+# Archivos no funcionales / Enunciados de prueba
+*.pdf
+contenido_pdf.txt
+*.log
