@@ -367,7 +367,7 @@
 
           <div class="form-group">
             <label class="input-label">Número</label>
-            <input type="text" [ngModel]="viaNumero()" (ngModelChange)="viaNumero.set($event)" class="form-input" />
+            <input type="text" [ngModel]="viaNumero()" (ngModelChange)="viaNumero.set($event)" placeholder="Ej: 10" class="form-input" />
           </div>
 
           <div class="form-group">
@@ -388,12 +388,12 @@
 
           <div class="form-group">
             <label class="input-label">Cruce (#)</label>
-            <input type="text" [ngModel]="cruceNumero()" (ngModelChange)="cruceNumero.set($event)" class="form-input" />
+            <input type="text" [ngModel]="cruceNumero()" (ngModelChange)="cruceNumero.set($event)" placeholder="Ej: 5" class="form-input" />
           </div>
 
           <div class="form-group">
             <label class="input-label">Placa (-)</label>
-            <input type="text" [ngModel]="placaNumero()" (ngModelChange)="placaNumero.set($event)" class="form-input" />
+            <input type="text" [ngModel]="placaNumero()" (ngModelChange)="placaNumero.set($event)" placeholder="Ej: 30" class="form-input" />
           </div>
         </div>
       }
@@ -512,6 +512,7 @@
 
   </div>
 </div>
+
 
 
 
