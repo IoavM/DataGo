@@ -1,13 +1,14 @@
 ﻿import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Cliente } from '../models/cliente.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClienteService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://datago-api.onrender.com/api';
+  private apiUrl = environment.apiUrl;
 
   private clientesSignal = signal<Cliente[]>([]);
   readonly clientes = this.clientesSignal.asReadonly();
@@ -103,6 +104,7 @@ export class ClienteService {
     return { nombres, apellidos };
   }
 }
+
 
 
 

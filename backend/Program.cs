@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using backend.Data;
 using backend.Services;
+using backend.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,8 +53,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DataGo API v1"));
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors("AllowFrontend");
 app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
