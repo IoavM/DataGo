@@ -16,3 +16,13 @@
 }
 
 
+
+/* Responsive */
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+  }
+  .main-viewport {
+    height: calc(100vh - 65px);
+  }
+}

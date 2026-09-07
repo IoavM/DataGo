@@ -197,3 +197,29 @@
   font-size: 11px;
 }
 
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 18px;
+    border-right: none;
+    border-bottom: 1px solid var(--sidebar-border);
+  }
+  .sidebar-bottom {
+    display: none;
+  }
+  .nav-menu {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-item span {
+    display: none;
+  }
+}
