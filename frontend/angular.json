@@ -24,7 +24,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
+            "outputPath": { "base": "dist/frontend", "browser": "" }, "styles": [
               "src/styles.css"
             ]
           },
@@ -71,4 +71,5 @@
     }
   }
 }
+
 
