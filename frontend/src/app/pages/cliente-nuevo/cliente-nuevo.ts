@@ -20,7 +20,7 @@ export class ClienteNuevoComponent {
   nombreNegocio = signal('Distribuciones JC');
   razonSocial = signal('Juan Carlos Pérez Gómez');
 
-  // Cálculos reactivos de nombres (Paso 1)
+  // Cálculos reactivos de nombres
   nombresSeparados = computed(() => {
     if (this.tratamiento() === 'Empresa') {
       const nombre = this.razonSocial();
@@ -54,12 +54,10 @@ export class ClienteNuevoComponent {
   celular = signal('+57 312 849 2011');
   email = signal('jc.distribuciones@gmail.com');
 
-  // Al menos un teléfono registrado
   tieneTelefono = computed(() => {
     return this.telefonoFijo().trim().length > 0 || this.celular().trim().length > 0;
   });
 
-  // Validación anti-dummy
   esDummyEmail = computed(() => {
     const em = this.email().toLowerCase();
     return em.includes('test@') || em.includes('fake@') || em.includes('example@') || em === 'a@a.com';
@@ -82,7 +80,6 @@ export class ClienteNuevoComponent {
   cruceNumero = signal('5');
   placaNumero = signal('30');
 
-  // Vista previa de dirección generada en tiempo real
   direccionCompleta = computed(() => {
     if (this.esRural()) {
       return this.direccionRural() || 'Dirección rural pendiente';
@@ -96,14 +93,12 @@ export class ClienteNuevoComponent {
   estrato = signal(5);
   centro = signal('Sede Principal Medellín');
 
-  // Campos fijados automáticamente (Solo lectura según PDF)
   claseImpuesto = computed(() => {
     return this.tratamiento() === 'Sr/Sra' ? 'Persona Natural' : 'Persona Jurídica';
   });
 
   condicionPago = '0010 Contado';
 
-  // Cambiar tratamiento
   setTratamiento(tipo: 'Sr/Sra' | 'Empresa') {
     this.tratamiento.set(tipo);
     if (tipo === 'Empresa') {
@@ -117,7 +112,6 @@ export class ClienteNuevoComponent {
     }
   }
 
-  // Cambio de barrio (autocompletar)
   onBarrioChange(event: any) {
     const b = event.target.value;
     this.barrioSeleccionado.set(b);
@@ -136,7 +130,6 @@ export class ClienteNuevoComponent {
     }
   }
 
-  // Guardar y registrar
   guardarCliente() {
     if (this.esCanalModerno()) {
       alert('Error: Este cliente debe crearse mediante el flujo "Creación clientes canal moderno".');
@@ -148,25 +141,35 @@ export class ClienteNuevoComponent {
       return;
     }
 
-    this.clienteService.agregarCliente({
-      nombreCompleto: this.nombresSeparados().nombreCompleto,
+    const payload = {
+      tratamiento: this.tratamiento(),
       nombreNegocio: this.nombreNegocio(),
+      razonSocialExtendida: this.razonSocial(),
       tipoDocumento: this.tipoDocumento(),
-      numeroDocumento: this.tipoDocumento() === 'NIT' && this.dvCalculado() !== null
-        ? `${this.numeroDocumento()}-${this.dvCalculado()}`
-        : this.numeroDocumento(),
-      telefono: this.celular() || this.telefonoFijo(),
+      numeroDocumento: this.numeroDocumento(),
+      telefono: this.telefonoFijo(),
+      celular: this.celular(),
       email: this.email(),
-      municipio: this.municipio(),
+      esRural: this.esRural(),
+      direccionRural: this.direccionRural(),
+      viaTipo: this.viaTipo(),
+      viaNumero: this.viaNumero(),
+      viaLetra: this.viaLetra(),
+      viaCardinalidad: this.viaCardinalidad(),
+      cruceNumero: this.cruceNumero(),
+      placaNumero: this.placaNumero(),
       barrio: this.barrioSeleccionado(),
-      estrato: this.estrato(),
-      bloqueado: false
-    });
+      centro: this.centro(),
+      estrato: this.estrato()
+    };
 
-    this.router.navigate(['/clientes']);
+    this.clienteService.agregarCliente(payload, () => {
+      this.router.navigate(['/clientes']);
+    }, (err) => {
+      alert(err.error?.mensaje || 'Error al registrar cliente');
+    });
   }
 
-  // Scroll suave al paso deseado
   scrollTo(id: string) {
     const el = document.getElementById(id);
     if (el) {

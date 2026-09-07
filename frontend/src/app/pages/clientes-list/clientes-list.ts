@@ -14,15 +14,12 @@ import { ClienteService } from '../../services/cliente.service';
 export class ClientesListComponent {
   private clienteService = inject(ClienteService);
 
-  // Clientes desde el servicio
   clientes = this.clienteService.clientes;
 
-  // Filtros de búsqueda
   terminoBusqueda = signal('');
   filtroEstado = signal<'todos' | 'activos' | 'bloqueados'>('todos');
   filtroTipoDoc = signal('todos');
 
-  // Clientes filtrados
   clientesFiltrados = computed(() => {
     const q = this.terminoBusqueda().toLowerCase().trim();
     const estado = this.filtroEstado();
@@ -48,12 +45,10 @@ export class ClientesListComponent {
     });
   });
 
-  // Conteo reactivo
   conteoTodos = computed(() => this.clientes().length);
   conteoActivos = computed(() => this.clientes().filter(c => !c.bloqueado).length);
   conteoBloqueados = computed(() => this.clientes().filter(c => c.bloqueado).length);
 
-  // Paginación condicional: solo si hay más de 5 registros (como solicitó el usuario)
   mostrarPaginacion = computed(() => this.clientesFiltrados().length > 5);
 
   setFiltroEstado(nuevo: 'todos' | 'activos' | 'bloqueados') {
@@ -64,5 +59,11 @@ export class ClientesListComponent {
     this.terminoBusqueda.set('');
     this.filtroEstado.set('todos');
     this.filtroTipoDoc.set('todos');
+  }
+
+  retirarCliente(id: number) {
+    if (confirm('¿Está seguro de que desea retirar este cliente? Se aplicará baja lógica.')) {
+      this.clienteService.retirarCliente(id);
+    }
   }
 }
