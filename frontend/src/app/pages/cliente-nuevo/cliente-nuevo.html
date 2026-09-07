@@ -171,39 +171,53 @@
               type="text" 
               [ngModel]="numeroDocumento()" 
               (ngModelChange)="numeroDocumento.set($event)"
-              placeholder="Número sin puntos" 
+              placeholder="Número sin puntos ni guiones" 
               class="form-input" 
             />
-            <span class="status-valid">✓ Válido</span>
+            @if (documentoValido()) {
+              <span class="status-valid">✓ Válido</span>
+            } @else if (numeroDocumento().length > 0) {
+              <span class="status-invalid">✕ Inválido</span>
+            }
           </div>
-          <span class="input-hint success-hint">✓ Documento válido y sin duplicados en el registro activo</span>
+          @if (documentoValido()) {
+            <span class="input-hint success-hint">✓ Documento con estructura correcta y sin duplicados</span>
+          } @else if (numeroDocumento().length > 0) {
+            <span class="input-hint text-danger">⚠️ Ingrese un documento real (entre 6 y 10 dígitos sin dummies)</span>
+          }
         </div>
       </div>
 
-      <!-- Tarjeta de Cálculo del Dígito de Verificación (D.V.) de la DIAN -->
-      <div class="dv-calc-card">
-        <div class="dv-left">
-          <div class="dv-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect width="18" height="18" x="3" y="3" rx="2"/>
-              <path d="M7 7h10"/>
-              <path d="M7 12h10"/>
-              <path d="M7 17h10"/>
-            </svg>
+      <!-- Tarjeta de Cálculo del Dígito de Verificación (D.V.) de la DIAN (Solo visible si es NIT) -->
+      @if (tipoDocumento() === 'NIT') {
+        <div class="dv-calc-card">
+          <div class="dv-left">
+            <div class="dv-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="18" height="18" x="3" y="3" rx="2"/>
+                <path d="M7 7h10"/>
+                <path d="M7 12h10"/>
+                <path d="M7 17h10"/>
+              </svg>
+            </div>
+            <div class="dv-text">
+              <strong>CÁLCULO DE DÍGITO DE VERIFICACIÓN (DV)</strong>
+              <span>Algoritmo DIAN módulo 11 calculado automáticamente en tiempo real</span>
+            </div>
           </div>
-          <div class="dv-text">
-            <strong>CÁLCULO DE DÍGITO DE VERIFICACIÓN (DV)</strong>
-            <span>Algoritmo DIAN módulo 11 calculado automáticamente en tiempo real</span>
+          <div class="dv-right">
+            <div class="dv-pill">
+              <span class="dv-sub">DÍGITO CALCULADO</span>
+              <span class="dv-result">DV: {{ dvCalculado() ?? '-' }}</span>
+            </div>
+            @if (dvCalculado() !== null) {
+              <span class="dv-badge-success">✓ NIT válido</span>
+            } @else {
+              <span class="dv-badge-error">⚠️ NIT incompleto</span>
+            }
           </div>
         </div>
-        <div class="dv-right">
-          <div class="dv-pill">
-            <span class="dv-sub">DÍGITO CALCULADO</span>
-            <span class="dv-result">DV: {{ dvCalculado() ?? '-' }}</span>
-          </div>
-          <span class="dv-badge-success">✓ NIT válido</span>
-        </div>
-      </div>
+      }
 
       <!-- Alerta de Canal Moderno -->
       <div class="alert-box" [class.alert-danger]="esCanalModerno()">
@@ -498,4 +512,5 @@
 
   </div>
 </div>
+
 

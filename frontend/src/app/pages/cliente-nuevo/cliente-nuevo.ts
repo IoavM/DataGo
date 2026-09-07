@@ -38,8 +38,9 @@ export class ClienteNuevoComponent {
   tipoDocumento = signal('C.C.');
   numeroDocumento = signal('1020485921');
 
-  // D.V. reactivo (Algoritmo DIAN Módulo 11)
+  // D.V. reactivo (Algoritmo DIAN Módulo 11) - Solo aplica si es NIT
   dvCalculado = computed(() => {
+    if (this.tipoDocumento() !== 'NIT') return null;
     return this.clienteService.calcularDV(this.numeroDocumento());
   });
 
@@ -47,6 +48,20 @@ export class ClienteNuevoComponent {
   esCanalModerno = computed(() => {
     const doc = this.numeroDocumento().replace(/\D/g, '');
     return this.clienteService.canalModernoDocs.includes(doc);
+  });
+
+  // Validación real del número de documento
+  documentoValido = computed(() => {
+    const doc = this.numeroDocumento().replace(/\D/g, '');
+    if (!doc) return false;
+    if (this.esCanalModerno()) return false;
+    // Dummies: no permitir secuencias o dígitos repetidos
+    if (/^(\d)\1+$/.test(doc) || doc === '123456789' || doc === '1234567') return false;
+
+    if (this.tipoDocumento() === 'NIT') {
+      return doc.length >= 8 && doc.length <= 10 && this.dvCalculado() !== null;
+    }
+    return doc.length >= 6 && doc.length <= 10;
   });
 
   // PASO 3: Contacto
@@ -177,3 +192,4 @@ export class ClienteNuevoComponent {
     }
   }
 }
+
