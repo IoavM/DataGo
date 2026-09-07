@@ -64,8 +64,8 @@ export class ClienteNuevoComponent implements OnInit {
 
   // PASO 1: Datos Generales
   tratamiento = signal<'Sr/Sra' | 'Empresa'>('Sr/Sra');
-  nombreNegocio = signal('Distribuciones JC');
-  razonSocial = signal('Juan Carlos Pérez Gómez');
+  nombreNegocio = signal('');
+  razonSocial = signal('');
 
   // Cálculos reactivos de nombres
   nombresSeparados = computed(() => {
@@ -83,7 +83,7 @@ export class ClienteNuevoComponent implements OnInit {
 
   // PASO 2: Identificación Oficial
   tipoDocumento = signal('C.C.');
-  numeroDocumento = signal('1020485921');
+  numeroDocumento = signal('');
 
   // D.V. reactivo (Algoritmo DIAN Módulo 11) - Solo aplica si es NIT
   dvCalculado = computed(() => {
@@ -112,9 +112,9 @@ export class ClienteNuevoComponent implements OnInit {
   });
 
   // PASO 3: Contacto
-  telefonoFijo = signal('(604) 448 9200');
-  celular = signal('+57 312 849 2011');
-  email = signal('jc.distribuciones@gmail.com');
+  telefonoFijo = signal('');
+  celular = signal('');
+  email = signal('');
 
   tieneTelefono = computed(() => {
     return this.telefonoFijo().trim().length > 0 || this.celular().trim().length > 0;
@@ -136,11 +136,11 @@ export class ClienteNuevoComponent implements OnInit {
 
   // Nomenclatura urbana
   viaTipo = signal('Calle');
-  viaNumero = signal('10');
-  viaLetra = signal('A');
-  viaCardinalidad = signal('Sur');
-  cruceNumero = signal('5');
-  placaNumero = signal('30');
+  viaNumero = signal('');
+  viaLetra = signal('');
+  viaCardinalidad = signal('');
+  cruceNumero = signal('');
+  placaNumero = signal('');
 
   direccionCompleta = computed(() => {
     if (this.esRural()) {
@@ -266,6 +266,7 @@ export class ClienteNuevoComponent implements OnInit {
     }
   }
 }
+
 
 
 
