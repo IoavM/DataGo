@@ -3,9 +3,11 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  max-width: 1100px;
+  max-width: 960px;
   width: 100%;
+  margin: 0 auto;
   box-sizing: border-box;
+  text-align: left;
 }
 
 /* Header Superior con Breadcrumb */
@@ -837,3 +839,4 @@
   box-shadow: 0 4px 14px rgba(24, 111, 85, 0.3);
   transform: translateY(-1px);
 }
+
