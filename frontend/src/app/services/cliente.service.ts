@@ -50,10 +50,10 @@ export class ClienteService {
     });
   }
 
-  // Algoritmo oficial de DIAN para Dígito de Verificación (Módulo 11)
+  // Cálculo DV DIAN módulo 11
   calcularDV(nit: string): number | null {
     const limpio = nit.replace(/\D/g, '');
-    // En Colombia un NIT tiene entre 8 y 10 dígitos (máximo 15 según estándar DIAN)
+    
     if (!limpio || limpio.length < 5 || limpio.length > 15) return null;
 
     const primos = [71, 67, 59, 53, 47, 43, 41, 37, 29, 23, 19, 17, 13, 7, 3];
@@ -69,7 +69,7 @@ export class ClienteService {
     return (residuo === 0 || residuo === 1) ? residuo : 11 - residuo;
   }
 
-  // Separación de nombres y apellidos
+  // Separación de nombres
   separarNombresApellidos(nombreLegal: string): { nombres: string; apellidos: string } {
     const palabras = nombreLegal.trim().split(/\s+/).filter(p => p.length > 0);
     if (palabras.length === 0) return { nombres: '', apellidos: '' };
@@ -82,5 +82,6 @@ export class ClienteService {
     return { nombres, apellidos };
   }
 }
+
 
 

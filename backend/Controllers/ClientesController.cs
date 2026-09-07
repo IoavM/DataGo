@@ -15,23 +15,14 @@ public class ClientesController : ControllerBase
         _clienteService = clienteService;
     }
 
-    /// <summary>
-    /// Consulta el listado general con filtros opcionales (búsqueda, estado y tipo de documento).
-    /// </summary>
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<ClienteListDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ObtenerTodos([FromQuery] string? q, [FromQuery] string? estado, [FromQuery] string? tipoDoc)
     {
         var clientes = await _clienteService.ObtenerTodosAsync(q, estado, tipoDoc);
         return Ok(clientes);
     }
 
-    /// <summary>
-    /// Consulta el detalle de un cliente puntual por su ID.
-    /// </summary>
     [HttpGet("{id:int}")]
-    [ProducesResponseType(typeof(ClienteResponseDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ObtenerPorId(int id)
     {
         try
@@ -45,13 +36,7 @@ public class ClientesController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Registra un nuevo Cliente Residencial aplicando todas las validaciones de negocio.
-    /// </summary>
     [HttpPost]
-    [ProducesResponseType(typeof(ClienteResponseDto), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Crear([FromBody] ClienteCreateDto dto)
     {
         try
@@ -65,22 +50,15 @@ public class ClientesController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
-            // Errores de negocio (Canal Moderno o Documento duplicado)
             return BadRequest(new { mensaje = ex.Message });
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = "Error interno procesando la solicitud.", detalle = ex.Message });
+            return StatusCode(500, new { mensaje = "Error interno.", detalle = ex.Message });
         }
     }
 
-    /// <summary>
-    /// Modifica los campos permitidos de un Cliente Residencial activo.
-    /// </summary>
     [HttpPut("{id:int}")]
-    [ProducesResponseType(typeof(ClienteResponseDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Actualizar(int id, [FromBody] ClienteUpdateDto dto)
     {
         try
@@ -98,18 +76,11 @@ public class ClientesController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
-            // Bloqueado para modificación
             return BadRequest(new { mensaje = ex.Message });
         }
     }
 
-    /// <summary>
-    /// Ejecuta el Retiro (Baja Lógica) de un Cliente Residencial.
-    /// </summary>
     [HttpDelete("{id:int}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Retirar(int id)
     {
         try
@@ -127,9 +98,6 @@ public class ClientesController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Endpoint alternativo explícito para retiro lógico.
-    /// </summary>
     [HttpPost("{id:int}/retirar")]
     public async Task<IActionResult> RetirarPost(int id)
     {

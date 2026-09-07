@@ -5,7 +5,7 @@
   box-sizing: border-box;
 }
 
-/* Header Superior de ANCHO COMPLETO (100% de la pantalla) */
+/* Header */
 .top-header {
   width: 100%;
   box-sizing: border-box;
@@ -17,7 +17,7 @@
   background-color: var(--surface);
 }
 
-/* Contenedor solo del formulario centrado con margen automático */
+/* Formulario */
 .form-content-center {
   max-width: 960px;
   width: 100%;
@@ -155,7 +155,7 @@
   color: var(--text-muted);
 }
 
-/* Título de la Página */
+/* Título */
 .form-title-section {
   display: flex;
   flex-direction: column;
@@ -299,7 +299,7 @@
   color: var(--text-muted);
 }
 
-/* Tarjetas de cada paso */
+/* Tarjetas */
 .form-step-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -361,7 +361,7 @@
   border-radius: var(--radius-full);
 }
 
-/* Campos de Formulario */
+/* Inputs */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -402,7 +402,7 @@
   color: #059669;
 }
 
-/* Selector de Tratamiento Segmentado */
+/* Tratamiento */
 .segmented-treatment {
   display: inline-flex;
   gap: 12px;
@@ -445,7 +445,7 @@
   box-shadow: inset 0 0 0 2px #ffffff;
 }
 
-/* Cuadro de Cálculo Automático */
+/* Cálculo automático */
 .auto-calc-box {
   background-color: #ecfdf5;
   border: 1px solid #a7f3d0;
@@ -489,7 +489,7 @@
   font-weight: 700;
 }
 
-/* Tarjeta D.V. Algoritmo DIAN */
+/* Dígito verificación */
 .dv-calc-card {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -566,7 +566,7 @@
   border-radius: var(--radius-sm);
 }
 
-/* Alerta Canal Moderno */
+/* Alertas */
 .alert-box {
   background-color: #fffbeb;
   border: 1px solid #fef3c7;
@@ -731,7 +731,7 @@
   color: #064e3b;
 }
 
-/* Paso 5 */
+/* Datos adicionales */
 .readonly-section {
   margin-top: 4px;
 }
@@ -763,7 +763,7 @@
   color: var(--text-muted);
 }
 
-/* Paso 6: Resumen */
+/* Resumen */
 .review-card {
   border-left: 4px solid var(--primary);
 }
@@ -793,7 +793,7 @@
   color: var(--text-main);
 }
 
-/* Footer de Acciones */
+/* Footer */
 .form-action-footer {
   display: flex;
   justify-content: space-between;
@@ -880,4 +880,5 @@
   color: #dc2626 !important;
   font-weight: 600;
 }
+
 

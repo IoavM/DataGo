@@ -106,7 +106,7 @@ public class ClienteService
 
     public async Task<ClienteResponseDto> CrearAsync(ClienteCreateDto dto)
     {
-        // 1. Validar campos obligatorios básicos
+        // Validación de campos básicos
         if (string.IsNullOrWhiteSpace(dto.NombreNegocio))
             throw new ArgumentException("El nombre de negocio es obligatorio.");
         if (string.IsNullOrWhiteSpace(dto.RazonSocialExtendida))
@@ -114,7 +114,7 @@ public class ClienteService
         if (string.IsNullOrWhiteSpace(dto.NumeroDocumento))
             throw new ArgumentException("El número de documento es obligatorio.");
 
-        // 2. Validación de Canal Moderno (Regla 3.4)
+        // Validación Canal Moderno
         var docLimpio = Regex.Replace(dto.NumeroDocumento, @"\D", "");
         var existeEnCanalModerno = await _context.ClientesCanalModerno
             .AnyAsync(cm => cm.NumeroDocumento == docLimpio);
@@ -123,7 +123,7 @@ public class ClienteService
             throw new InvalidOperationException("El cliente debe crearse mediante el flujo 'Creación clientes canal moderno'.");
         }
 
-        // 3. Validación de documento duplicado activo
+        // Validación duplicados
         var duplicado = await _context.Clientes
             .AnyAsync(c => c.NumeroDocumento == docLimpio && !c.Bloqueado);
         if (duplicado)
@@ -131,7 +131,7 @@ public class ClienteService
             throw new InvalidOperationException($"Ya existe un cliente activo registrado con el documento {docLimpio}.");
         }
 
-        // 4. Validación de Tratamiento e Identificación Fiscal (NIT / D.V.)
+        // Validación NIT y DV
         int? dvCalculado = null;
         if (dto.Tratamiento.Equals("Empresa", StringComparison.OrdinalIgnoreCase))
         {
@@ -143,7 +143,7 @@ public class ClienteService
                 throw new ArgumentException("El formato del NIT es incorrecto para el cálculo de dígito de verificación.");
         }
 
-        // 5. Validación de Comunicación (Regla 3.2)
+        // Validación contacto y anti-dummy
         bool tieneTelefono = !string.IsNullOrWhiteSpace(dto.Telefono) || !string.IsNullOrWhiteSpace(dto.Celular);
         if (!tieneTelefono)
             throw new ArgumentException("Debe ingresar al menos un número telefónico (fijo o celular).");
@@ -153,7 +153,7 @@ public class ClienteService
 
         ValidarValoresDummy(dto.Telefono, dto.Celular, dto.Email);
 
-        // 6. Validación de Dirección (Regla 3.3)
+        // Validación dirección
         string direccionFinal;
         if (dto.EsRural)
         {
@@ -171,18 +171,18 @@ public class ClienteService
             direccionFinal = $"{dto.ViaTipo} {dto.ViaNumero}{dto.ViaLetra} {dto.ViaCardinalidad} # {dto.CruceNumero}-{dto.PlacaNumero}".Replace("  ", " ").Trim();
         }
 
-        // 7. Autocompletar datos del Barrio
+        // Autocompletar barrio
         var barrioInfo = await _context.Barrios.FirstOrDefaultAsync(b => b.Nombre.ToLower() == dto.Barrio.ToLower());
         string municipio = barrioInfo?.Municipio ?? "Medellín";
         string departamento = barrioInfo?.Departamento ?? "Antioquia";
         string pais = barrioInfo?.Pais ?? "Colombia";
         string zonaTransporte = barrioInfo?.ZonaTransporte ?? "Zona Metropolitana";
 
-        // 8. Validación de Estrato (Regla 3.5)
+        // Validación estrato
         if (dto.Estrato < 1 || dto.Estrato > 6)
             throw new ArgumentException("El estrato debe ser un valor entre 1 y 6.");
 
-        // 9. Cálculo de Nombres y Campos Derivados (Reglas 3.1 y 3.6)
+        // Cálculo de nombres y derivados
         string nombresCalculados;
         string apellidosCalculados;
         string nombreCompletoCalculado;
@@ -254,14 +254,14 @@ public class ClienteService
         if (cliente == null)
             throw new KeyNotFoundException("El cliente a consultar no existe.");
 
-        // Regla 5.2: Un cliente bloqueado no puede modificarse
+        // Validación cliente bloqueado
         if (cliente.Bloqueado)
             throw new InvalidOperationException("No se puede modificar un cliente que se encuentra bloqueado o retirado.");
 
         if (string.IsNullOrWhiteSpace(dto.NombreNegocio))
             throw new ArgumentException("El nombre de negocio no puede estar vacío.");
 
-        // Regla 5.1: Si cambian nombres/apellidos, se recalcula la Razón Social y Nombre Completo
+        // Recálculo de razón social
         if (!string.IsNullOrWhiteSpace(dto.Nombres) && !string.IsNullOrWhiteSpace(dto.Apellidos))
         {
             cliente.Nombres = dto.Nombres.Trim();
@@ -333,7 +333,7 @@ public class ClienteService
         if (cliente == null)
             throw new KeyNotFoundException("El cliente a consultar no existe.");
 
-        // Regla 6: No se puede retirar a alguien ya retirado
+        // Validación ya retirado
         if (cliente.Bloqueado)
             throw new InvalidOperationException("El cliente ya se encuentra en estado retirado/bloqueado.");
 
@@ -345,7 +345,7 @@ public class ClienteService
         await _context.SaveChangesAsync();
     }
 
-    // Algoritmo oficial DIAN Módulo 11 para Dígito de Verificación
+    // Algoritmo DIAN módulo 11
     public static int? CalcularDigitoVerificacion(string nitLimpio)
     {
         if (string.IsNullOrWhiteSpace(nitLimpio) || nitLimpio.Length < 5) return null;
@@ -394,3 +394,4 @@ public class ClienteService
             throw new ArgumentException("El correo electrónico contiene una expresión dummy no permitida.");
     }
 }
+
