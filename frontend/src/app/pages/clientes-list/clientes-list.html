@@ -138,7 +138,7 @@
               @if (c.bloqueado) {
                 <span class="badge-blocked">Bloqueado</span>
               } @else {
-                <button class="action-btn" title="Ver detalle">
+                <button class="action-btn" (click)="verDetalle(c)" title="Ver detalle">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
                     <circle cx="12" cy="12" r="3"/>
@@ -200,3 +200,88 @@
 
 
 
+
+  <!-- Modal Detalle del Cliente -->
+  @if (clienteSeleccionado(); as cliente) {
+    <div class="modal-backdrop" (click)="cerrarDetalle()">
+      <div class="modal-card" (click)="$event.stopPropagation()">
+        
+        <div class="modal-header">
+          <div class="modal-header-info">
+            <span class="status-pill" [class.badge-inactivo]="cliente.bloqueado" [class.badge-activo]="!cliente.bloqueado">
+              {{ cliente.bloqueado ? '● Retirado / Bloqueado' : '● Activo' }}
+            </span>
+            <h2 class="modal-client-name">{{ cliente.nombreCompleto }}</h2>
+            <div class="modal-meta-row">
+              <span class="meta-tag">Código: <strong>{{ cliente.codigo }}</strong></span>
+              <span class="meta-tag">Negocio: <strong>{{ cliente.nombreNegocio }}</strong></span>
+              <span class="meta-tag">Estrato: <strong>{{ cliente.estrato }}</strong></span>
+            </div>
+          </div>
+          <button class="modal-close-btn" (click)="cerrarDetalle()" title="Cerrar">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="modal-info-grid">
+            <div class="info-block">
+              <span class="info-label">Documento Oficial</span>
+              <span class="info-val">{{ cliente.tipoDocumento }}: <strong>{{ cliente.numeroDocumento }}</strong></span>
+            </div>
+            <div class="info-block">
+              <span class="info-label">Tratamiento</span>
+              <span class="info-val">{{ cliente.tratamiento || 'Sr/Sra' }}</span>
+            </div>
+            <div class="info-block">
+              <span class="info-label">Teléfono de Contacto</span>
+              <span class="info-val">{{ cliente.telefono || cliente.celular || 'No registrado' }}</span>
+            </div>
+            <div class="info-block">
+              <span class="info-label">Correo Electrónico</span>
+              <span class="info-val">{{ cliente.email || 'No registrado' }}</span>
+            </div>
+            <div class="info-block full-width">
+              <span class="info-label">Dirección Estandarizada</span>
+              <span class="info-val highlight-address">{{ cliente.direccionEstandarizada || 'Sin nomenclatura' }}</span>
+            </div>
+            <div class="info-block">
+              <span class="info-label">Barrio / Municipio</span>
+              <span class="info-val">{{ cliente.barrio }} ({{ cliente.municipio }}, {{ cliente.departamento }})</span>
+            </div>
+            <div class="info-block">
+              <span class="info-label">Zona de Transporte</span>
+              <span class="info-val">{{ cliente.zonaTransporte || 'Zona Valle de Aburrá' }}</span>
+            </div>
+            @if (cliente.bloqueado) {
+              <div class="info-block full-width alert-block">
+                <span class="info-label text-danger">Estado de Baja Lógica</span>
+                <span class="info-val text-danger">Cliente bloqueado y retirado del maestro activo.</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <div class="modal-footer-left">
+            @if (!cliente.bloqueado) {
+              <button class="btn-block-client" (click)="retirarDesdeModal(cliente.id)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                </svg>
+                Bloquear / Retirar Cliente
+              </button>
+            } @else {
+              <span class="blocked-notice">🔒 Este cliente ya se encuentra bloqueado</span>
+            }
+          </div>
+          <div class="modal-footer-right">
+            <button class="btn-modal-cancel" (click)="cerrarDetalle()">Cerrar</button>
+            @if (!cliente.bloqueado) {
+              <button class="btn-modal-edit" (click)="editarDesdeModal(cliente.id)">Editar Datos</button>
+            }
+          </div>
+        </div>
+
+      </div>
+    </div>
+  }

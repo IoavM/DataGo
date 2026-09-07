@@ -58,12 +58,16 @@ export class ClienteService {
     });
   }
 
-  retirarCliente(id: number) {
+  retirarCliente(id: number, onSuccess?: () => void, onError?: (err: any) => void) {
     this.http.delete(`${this.apiUrl}/clientes/${id}`).subscribe({
       next: () => {
         this.cargarClientes();
+        if (onSuccess) onSuccess();
       },
-      error: (err) => console.error('Error retirando cliente:', err)
+      error: (err) => {
+        console.error('Error retirando cliente:', err);
+        if (onError) onError(err);
+      }
     });
   }
 
@@ -99,6 +103,7 @@ export class ClienteService {
     return { nombres, apellidos };
   }
 }
+
 
 
 

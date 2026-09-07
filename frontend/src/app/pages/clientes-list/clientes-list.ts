@@ -14,6 +14,8 @@ import { ClienteService } from '../../services/cliente.service';
   styleUrl: './clientes-list.css'
 })
 export class ClientesListComponent {
+  clienteSeleccionado = signal<any | null>(null);
+  cargandoDetalle = signal(false);
   private clienteService = inject(ClienteService);
   private router = inject(Router);
 
@@ -64,6 +66,45 @@ export class ClientesListComponent {
     this.filtroTipoDoc.set('todos');
   }
 
+    verDetalle(c: Cliente) {
+    this.cargandoDetalle.set(true);
+    this.clienteService.obtenerPorId(c.id).subscribe({
+      next: (det: any) => {
+        this.clienteSeleccionado.set(det);
+        this.cargandoDetalle.set(false);
+      },
+      error: () => {
+        this.cargandoDetalle.set(false);
+        this.clienteSeleccionado.set(c);
+      }
+    });
+  }
+
+  cerrarDetalle() {
+    this.clienteSeleccionado.set(null);
+  }
+
+  retirarDesdeModal(id: number) {
+    if (confirm('¿Está seguro de retirar este cliente residencial? Se aplicará la baja lógica y quedará bloqueado.')) {
+      this.clienteService.retirarCliente(id, () => {
+        alert('Cliente retirado y bloqueado exitosamente.');
+        this.cerrarDetalle();
+      }, (err) => {
+        alert(err.error?.mensaje || 'Error al retirar cliente');
+      });
+    }
+  }
+
+  editarDesdeModal(id: number) {
+    const sel = this.clienteSeleccionado();
+    if (sel?.bloqueado) {
+      alert('Atención: Este cliente se encuentra retirado/bloqueado y no puede modificarse.');
+      return;
+    }
+    this.cerrarDetalle();
+    this.router.navigate(['/clientes/editar', id]);
+  }
+
   editarCliente(c: Cliente) {
     if (c.bloqueado) {
       alert('Atención: Este cliente se encuentra retirado/bloqueado y según las reglas de negocio no puede modificarse.');
@@ -78,5 +119,7 @@ export class ClientesListComponent {
     }
   }
 }
+
+
 
 
