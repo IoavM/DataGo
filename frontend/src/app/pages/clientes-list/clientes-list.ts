@@ -1,4 +1,6 @@
 ﻿import { Component, inject, signal, computed } from '@angular/core';
+import { Router } from '@angular/router';
+import { Cliente } from '../../models/cliente.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -13,6 +15,7 @@ import { ClienteService } from '../../services/cliente.service';
 })
 export class ClientesListComponent {
   private clienteService = inject(ClienteService);
+  private router = inject(Router);
 
   clientes = this.clienteService.clientes;
 
@@ -61,9 +64,19 @@ export class ClientesListComponent {
     this.filtroTipoDoc.set('todos');
   }
 
+  editarCliente(c: Cliente) {
+    if (c.bloqueado) {
+      alert('Atención: Este cliente se encuentra retirado/bloqueado y según las reglas de negocio no puede modificarse.');
+      return;
+    }
+    this.router.navigate(['/clientes/editar', c.id]);
+  }
+
   retirarCliente(id: number) {
     if (confirm('¿Está seguro de que desea retirar este cliente? Se aplicará baja lógica.')) {
       this.clienteService.retirarCliente(id);
     }
   }
 }
+
+

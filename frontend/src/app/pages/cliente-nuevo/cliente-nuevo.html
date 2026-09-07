@@ -43,7 +43,7 @@
       </svg>
       <span>FLUJO GUIADO DE ALTA RESIDENCIAL</span>
     </div>
-    <h1 class="page-title">Nuevo Cliente Residencial</h1>
+    <h1 class="page-title">{{ esEdicion() ? "Modificar Cliente Residencial" : "Nuevo Cliente Residencial" }}</h1>
     <p class="page-subtitle">Completa la información paso a paso. Sistema con validación en tiempo real y asistencia inteligente.</p>
   </section>
 
@@ -512,6 +512,7 @@
 
   </div>
 </div>
+
 
 
 

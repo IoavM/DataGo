@@ -1,7 +1,8 @@
 ﻿import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { OnInit } from '@angular/core';
 import { ClienteService } from '../../services/cliente.service';
 
 @Component({
@@ -11,7 +12,53 @@ import { ClienteService } from '../../services/cliente.service';
   templateUrl: './cliente-nuevo.html',
   styleUrl: './cliente-nuevo.css'
 })
-export class ClienteNuevoComponent {
+export class ClienteNuevoComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  esEdicion = signal(false);
+  clienteId = signal<number | null>(null);
+  ngOnInit() {
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (idParam) {
+      const id = Number(idParam);
+      this.esEdicion.set(true);
+      this.clienteId.set(id);
+      this.clienteService.obtenerPorId(id).subscribe({
+        next: (c: any) => {
+          if (c.bloqueado) {
+            alert('Atención: Este cliente se encuentra retirado/bloqueado y según las reglas de negocio no puede modificarse.');
+            this.router.navigate(['/clientes']);
+            return;
+          }
+          this.tratamiento.set(c.tratamiento || 'Sr/Sra');
+          this.nombreNegocio.set(c.nombreNegocio || '');
+          this.razonSocial.set(c.razonSocialExtendida || c.nombreCompleto || '');
+          this.tipoDocumento.set(c.tipoDocumento || 'C.C.');
+          this.numeroDocumento.set(c.numeroDocumento || '');
+          this.telefonoFijo.set(c.telefono || '');
+          this.celular.set(c.celular || '');
+          this.email.set(c.email || '');
+          this.barrioSeleccionado.set(c.barrio || 'Laureles');
+          this.municipio.set(c.municipio || 'Medellín');
+          this.departamento.set(c.departamento || 'Antioquia');
+          this.zonaTransporte.set(c.zonaTransporte || 'Zona Centro-Occidente');
+          this.estrato.set(c.estrato || 3);
+          this.esRural.set(c.esRural || false);
+          this.direccionRural.set(c.direccionRural || '');
+          this.viaTipo.set(c.viaTipo || 'Calle');
+          this.viaNumero.set(c.viaNumero || '');
+          this.viaLetra.set(c.viaLetra || '');
+          this.viaCardinalidad.set(c.viaCardinalidad || '');
+          this.cruceNumero.set(c.cruceNumero || '');
+          this.placaNumero.set(c.placaNumero || '');
+          this.centro.set(c.centro || 'Sede Principal Medellín');
+        },
+        error: (err: any) => {
+          alert('Error al cargar datos del cliente: ' + (err.error?.mensaje || 'No encontrado'));
+          this.router.navigate(['/clientes']);
+        }
+      });
+    }
+  }
   private clienteService = inject(ClienteService);
   private router = inject(Router);
 
@@ -178,11 +225,38 @@ export class ClienteNuevoComponent {
       estrato: this.estrato()
     };
 
-    this.clienteService.agregarCliente(payload, () => {
-      this.router.navigate(['/clientes']);
-    }, (err) => {
-      alert(err.error?.mensaje || 'Error al registrar cliente');
-    });
+    if (this.esEdicion() && this.clienteId()) {
+      const updatePayload = {
+        nombreNegocio: this.nombreNegocio(),
+        razonSocialExtendida: this.razonSocial(),
+        telefono: this.telefonoFijo(),
+        celular: this.celular(),
+        email: this.email(),
+        esRural: this.esRural(),
+        direccionRural: this.direccionRural(),
+        viaTipo: this.viaTipo(),
+        viaNumero: this.viaNumero(),
+        viaLetra: this.viaLetra(),
+        viaCardinalidad: this.viaCardinalidad(),
+        cruceNumero: this.cruceNumero(),
+        placaNumero: this.placaNumero(),
+        barrio: this.barrioSeleccionado(),
+        centro: this.centro(),
+        estrato: this.estrato()
+      };
+      this.clienteService.modificarCliente(this.clienteId()!, updatePayload, () => {
+        alert('Cliente modificado exitosamente.');
+        this.router.navigate(['/clientes']);
+      }, (err: any) => {
+        alert(err.error?.mensaje || 'Error al actualizar cliente');
+      });
+    } else {
+      this.clienteService.agregarCliente(payload, () => {
+        this.router.navigate(['/clientes']);
+      }, (err: any) => {
+        alert(err.error?.mensaje || 'Error al registrar cliente');
+      });
+    }
   }
 
   scrollTo(id: string) {
@@ -192,4 +266,6 @@ export class ClienteNuevoComponent {
     }
   }
 }
+
+
 

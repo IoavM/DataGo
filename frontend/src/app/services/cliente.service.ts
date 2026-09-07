@@ -17,6 +17,23 @@ export class ClienteService {
     this.cargarClientes();
   }
 
+    obtenerPorId(id: number) {
+    return this.http.get<any>(`${this.apiUrl}/clientes/${id}`);
+  }
+
+  modificarCliente(id: number, payload: any, onSuccess?: () => void, onError?: (err: any) => void) {
+    this.http.put<any>(`${this.apiUrl}/clientes/${id}`, payload).subscribe({
+      next: () => {
+        this.cargarClientes();
+        if (onSuccess) onSuccess();
+      },
+      error: (err) => {
+        console.error('Error modificando cliente:', err);
+        if (onError) onError(err);
+      }
+    });
+  }
+
   cargarClientes() {
     this.http.get<Cliente[]>(`${this.apiUrl}/clientes`).subscribe({
       next: (data) => {
@@ -82,6 +99,9 @@ export class ClienteService {
     return { nombres, apellidos };
   }
 }
+
+
+
 
 
 
